@@ -1,14 +1,14 @@
 <?php
 /**
- * AltPilot Options Class
+ * AutoAltify Options Class
  *
  * Handles plugin settings and options.
  *
- * @package AltPilot
+ * @package AutoAltify
  * @subpackage Core
  */
 
-namespace AltPilot\Core;
+namespace AutoAltify\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Options {
 
-	const OPTION_NAME = 'altpilot_options';
+	const OPTION_NAME = 'autoaltify_options';
 
 	/**
 	 * Default plugin options.

@@ -1,19 +1,19 @@
 <?php
 
 /**
- * AltPilot Admin Class
+ * AutoAltify Admin Class
  *
  * Handles plugin admin UI, settings page, and bulk actions.
  *
- * @package AltPilot
+ * @package AutoAltify
  * @subpackage Admin
  */
 
-namespace AltPilot\Admin;
+namespace AutoAltify\Admin;
 
-use AltPilot\Core\Generator;
-use AltPilot\Core\Logger;
-use AltPilot\Core\Options;
+use AutoAltify\Core\Generator;
+use AutoAltify\Core\Logger;
+use AutoAltify\Core\Options;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -25,8 +25,8 @@ if (! defined('ABSPATH')) {
 class Admin
 {
 
-    const NONCE_ACTION = 'altpilot_bulk_run';
-    const NONCE_NAME   = 'altpilot_bulk_nonce';
+    const NONCE_ACTION = 'autoaltify_bulk_run';
+    const NONCE_NAME   = 'autoaltify_bulk_nonce';
 
     /**
      * Options manager.
@@ -75,7 +75,7 @@ class Admin
         add_action('manage_media_custom_column', array($this, 'render_media_column'), 10, 2);
 
         // AJAX endpoint.
-        add_action('wp_ajax_altpilot_bulk_run', array($this, 'ajax_bulk_run'));
+        add_action('wp_ajax_autoaltify_bulk_run', array($this, 'ajax_bulk_run'));
 
         // Admin assets.
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
@@ -94,10 +94,10 @@ class Admin
     {
         add_submenu_page(
             'upload.php',
-            __('AltPilot', 'altpilot'),
-            __('AltPilot', 'altpilot'),
+            __('AutoAltify', 'autoaltify'),
+            __('AutoAltify', 'autoaltify'),
             'manage_options',
-            'altpilot',
+            'autoaltify',
             array($this, 'render_settings_page')
         );
     }
@@ -107,55 +107,55 @@ class Admin
      */
     public function register_settings()
     {
-        register_setting('altpilot_settings_group', Options::OPTION_NAME, array(
+        register_setting('autoaltify_settings_group', Options::OPTION_NAME, array(
             'sanitize_callback' => array($this->options, 'sanitize'),
         ));
 
         add_settings_section(
-            'altpilot_main_section',
-            __('AltPilot Settings', 'altpilot'),
+            'autoaltify_main_section',
+            __('AutoAltify Settings', 'autoaltify'),
             array($this, 'settings_section_cb'),
-            'altpilot'
+            'autoaltify'
         );
 
         add_settings_field(
             'auto_generate_on_upload',
-            __('Auto-generate on upload', 'altpilot'),
+            __('Auto-generate on upload', 'autoaltify'),
             array($this, 'field_auto_generate_cb'),
-            'altpilot',
-            'altpilot_main_section'
+            'autoaltify',
+            'autoaltify_main_section'
         );
 
         add_settings_field(
             'mode',
-            __('Generation Mode', 'altpilot'),
+            __('Generation Mode', 'autoaltify'),
             array($this, 'field_mode_cb'),
-            'altpilot',
-            'altpilot_main_section'
+            'autoaltify',
+            'autoaltify_main_section'
         );
 
         add_settings_field(
             'allowed_mimes',
-            __('Allowed image types', 'altpilot'),
+            __('Allowed image types', 'autoaltify'),
             array($this, 'field_allowed_mimes_cb'),
-            'altpilot',
-            'altpilot_main_section'
+            'autoaltify',
+            'autoaltify_main_section'
         );
 
         add_settings_field(
             'enable_logging',
-            __('Enable logging', 'altpilot'),
+            __('Enable logging', 'autoaltify'),
             array($this, 'field_logging_cb'),
-            'altpilot',
-            'altpilot_main_section'
+            'autoaltify',
+            'autoaltify_main_section'
         );
 
         add_settings_field(
             'batch_size',
-            __('Batch size for bulk run', 'altpilot'),
+            __('Batch size for bulk run', 'autoaltify'),
             array($this, 'field_batch_size_cb'),
-            'altpilot',
-            'altpilot_main_section'
+            'autoaltify',
+            'autoaltify_main_section'
         );
     }
 
@@ -164,7 +164,7 @@ class Admin
      */
     public function settings_section_cb()
     {
-        echo '<p>' . esc_html__('Configure AltPilot behaviour and tools.', 'altpilot') . '</p>';
+        echo '<p>' . esc_html__('Configure AutoAltify behaviour and tools.', 'autoaltify') . '</p>';
     }
 
     /**
@@ -176,7 +176,7 @@ class Admin
 ?>
         <label>
             <input type="checkbox" name="<?php echo esc_attr(Options::OPTION_NAME); ?>[auto_generate_on_upload]" value="1" <?php echo esc_attr($checked); ?>>
-            <?php esc_html_e('Automatically generate ALT text for images without ALT when uploaded.', 'altpilot'); ?>
+            <?php esc_html_e('Automatically generate ALT text for images without ALT when uploaded.', 'autoaltify'); ?>
         </label>
     <?php
     }
@@ -189,11 +189,11 @@ class Admin
         $mode = $this->options->get('mode');
     ?>
         <select name="<?php echo esc_attr(Options::OPTION_NAME); ?>[mode]">
-            <option value="title_only" <?php selected($mode, 'title_only'); ?>><?php esc_html_e('Title Only', 'altpilot'); ?></option>
-            <option value="title_site" <?php selected($mode, 'title_site'); ?>><?php esc_html_e('Title + Site Name', 'altpilot'); ?></option>
-            <option value="filename_clean" <?php selected($mode, 'filename_clean'); ?>><?php esc_html_e('Clean Filename', 'altpilot'); ?></option>
+            <option value="title_only" <?php selected($mode, 'title_only'); ?>><?php esc_html_e('Title Only', 'autoaltify'); ?></option>
+            <option value="title_site" <?php selected($mode, 'title_site'); ?>><?php esc_html_e('Title + Site Name', 'autoaltify'); ?></option>
+            <option value="filename_clean" <?php selected($mode, 'filename_clean'); ?>><?php esc_html_e('Clean Filename', 'autoaltify'); ?></option>
         </select>
-        <p class="description"><?php esc_html_e('Choose how AltPilot builds generated ALT values.', 'altpilot'); ?></p>
+        <p class="description"><?php esc_html_e('Choose how AutoAltify builds generated ALT values.', 'autoaltify'); ?></p>
     <?php
     }
 
@@ -234,7 +234,7 @@ class Admin
     ?>
         <label>
             <input type="checkbox" name="<?php echo esc_attr(Options::OPTION_NAME); ?>[enable_logging]" value="1" <?php echo esc_attr($checked); ?>>
-            <?php esc_html_e('Write operation logs to uploads/altpilot-logs/', 'altpilot'); ?>
+            <?php esc_html_e('Write operation logs to uploads/autoaltify-logs/', 'autoaltify'); ?>
         </label>
     <?php
     }
@@ -247,7 +247,7 @@ class Admin
         $size = $this->options->get('batch_size');
     ?>
         <input type="number" min="5" max="200" name="<?php echo esc_attr(Options::OPTION_NAME); ?>[batch_size]" value="<?php echo esc_attr($size); ?>">
-        <p class="description"><?php esc_html_e('Number of items to process per AJAX batch during bulk runs.', 'altpilot'); ?></p>
+        <p class="description"><?php esc_html_e('Number of items to process per AJAX batch during bulk runs.', 'autoaltify'); ?></p>
     <?php
     }
 
@@ -257,39 +257,39 @@ class Admin
     public function render_settings_page()
     {
         if (! current_user_can('manage_options')) {
-            wp_die(esc_html__('Insufficient permissions', 'altpilot'));
+            wp_die(esc_html__('Insufficient permissions', 'autoaltify'));
         }
     ?>
         <div class="wrap">
-            <h1><?php esc_html_e('AltPilot Settings', 'altpilot'); ?></h1>
+            <h1><?php esc_html_e('AutoAltify Settings', 'autoaltify'); ?></h1>
             <form method="post" action="options.php">
                 <?php
-                settings_fields('altpilot_settings_group');
-                do_settings_sections('altpilot');
+                settings_fields('autoaltify_settings_group');
+                do_settings_sections('autoaltify');
                 submit_button();
                 ?>
             </form>
 
             <hr />
 
-            <h2><?php esc_html_e('Tools', 'altpilot'); ?></h2>
-            <p><?php esc_html_e('Use the button below to generate missing ALT text across your media library. This runs in the background using batches to avoid timeouts.', 'altpilot'); ?></p>
+            <h2><?php esc_html_e('Tools', 'autoaltify'); ?></h2>
+            <p><?php esc_html_e('Use the button below to generate missing ALT text across your media library. This runs in the background using batches to avoid timeouts.', 'autoaltify'); ?></p>
 
             <p>
-                <button id="altpilot-run-all" class="button button-primary"><?php esc_html_e('Run ALT Generator on all media (missing only)', 'altpilot'); ?></button>
+                <button id="autoaltify-run-all" class="button button-primary"><?php esc_html_e('Run ALT Generator on all media (missing only)', 'autoaltify'); ?></button>
             </p>
 
-            <div id="altpilot-progress" style="display:none; margin-top:15px;">
-                <p><strong><?php esc_html_e('Progress', 'altpilot'); ?></strong></p>
-                <p><span id="altpilot-status">0</span></p>
+            <div id="autoaltify-progress" style="display:none; margin-top:15px;">
+                <p><strong><?php esc_html_e('Progress', 'autoaltify'); ?></strong></p>
+                <p><span id="autoaltify-status">0</span></p>
                 <div style="background:#f1f1f1;border:1px solid #ddd;height:20px;width:100%;border-radius:4px;overflow:hidden;">
-                    <div id="altpilot-bar" style="height:20px;width:0%;background:#0073aa;"></div>
+                    <div id="autoaltify-bar" style="height:20px;width:0%;background:#0073aa;"></div>
                 </div>
-                <p id="altpilot-summary" style="margin-top:10px;"></p>
+                <p id="autoaltify-summary" style="margin-top:10px;"></p>
             </div>
 
             <?php if (! empty($this->options->get('enable_logging'))) : ?>
-                <p><?php esc_html_e('Logs are stored at wp-content/uploads/altpilot-logs/altpilot.log', 'altpilot'); ?></p>
+                <p><?php esc_html_e('Logs are stored at wp-content/uploads/autoaltify-logs/autoaltify.log', 'autoaltify'); ?></p>
             <?php endif; ?>
 
         </div>
@@ -303,7 +303,7 @@ class Admin
      */
     public function enqueue_admin_assets($hook)
     {
-        if ('settings_page_altpilot' !== $hook) {
+        if ('settings_page_autoaltify' !== $hook) {
             return;
         }
 
@@ -313,7 +313,7 @@ class Admin
             'nonce' => wp_create_nonce(self::NONCE_ACTION),
             'batch_size' => intval($batch_size),
         );
-        wp_localize_script('altpilot-admin', 'AltPilotData', $data);
+        wp_localize_script('autoaltify-admin', 'AutoAltifyData', $data);
     }
 
     /**
@@ -325,7 +325,7 @@ class Admin
      */
     public function register_bulk_action($bulk_actions)
     {
-        $bulk_actions['altpilot_generate_alt'] = __('Generate ALT with AltPilot', 'altpilot');
+        $bulk_actions['autoaltify_generate_alt'] = __('Generate ALT with AutoAltify', 'autoaltify');
         return $bulk_actions;
     }
 
@@ -340,12 +340,12 @@ class Admin
      */
     public function handle_bulk_action($redirect_to, $doaction, $post_ids)
     {
-        if ($doaction !== 'altpilot_generate_alt') {
+        if ($doaction !== 'autoaltify_generate_alt') {
             return $redirect_to;
         }
 
         if (! current_user_can('upload_files')) {
-            $redirect_to = add_query_arg('altpilot_error', 'perm', $redirect_to);
+            $redirect_to = add_query_arg('autoaltify_error', 'perm', $redirect_to);
             return $redirect_to;
         }
 
@@ -380,8 +380,8 @@ class Admin
         }
 
         $redirect_to = add_query_arg(array(
-            'altpilot_processed' => intval($processed),
-            'altpilot_skipped' => intval($skipped),
+            'autoaltify_processed' => intval($processed),
+            'autoaltify_skipped' => intval($skipped),
         ), $redirect_to);
 
         return $redirect_to;
@@ -473,7 +473,7 @@ class Admin
      */
     public function add_media_column($cols)
     {
-        $cols['altpilot_alt_status'] = __('ALT Status', 'altpilot');
+        $cols['autoaltify_alt_status'] = __('ALT Status', 'autoaltify');
         return $cols;
     }
 
@@ -485,15 +485,15 @@ class Admin
      */
     public function render_media_column($column_name, $post_id)
     {
-        if ('altpilot_alt_status' !== $column_name) {
+        if ('autoaltify_alt_status' !== $column_name) {
             return;
         }
 
         $alt = get_post_meta($post_id, '_wp_attachment_image_alt', true);
         if (! empty($alt)) {
-            echo '<span style="color:green;">' . esc_html__('Present', 'altpilot') . '</span>';
+            echo '<span style="color:green;">' . esc_html__('Present', 'autoaltify') . '</span>';
         } else {
-            echo '<span style="color:#a00;">' . esc_html__('Missing', 'altpilot') . '</span>';
+            echo '<span style="color:#a00;">' . esc_html__('Missing', 'autoaltify') . '</span>';
         }
     }
 
@@ -502,23 +502,23 @@ class Admin
      */
     public function show_admin_notices()
     {
-        if (isset($_REQUEST['altpilot_processed']) || isset($_REQUEST['altpilot_error'])) {
-            $processed = isset($_REQUEST['altpilot_processed']) ? intval($_REQUEST['altpilot_processed']) : 0;
-            $skipped = isset($_REQUEST['altpilot_skipped']) ? intval($_REQUEST['altpilot_skipped']) : 0;
+        if (isset($_REQUEST['autoaltify_processed']) || isset($_REQUEST['autoaltify_error'])) {
+            $processed = isset($_REQUEST['autoaltify_processed']) ? intval($_REQUEST['autoaltify_processed']) : 0;
+            $skipped = isset($_REQUEST['autoaltify_skipped']) ? intval($_REQUEST['autoaltify_skipped']) : 0;
         ?>
             <div class="notice notice-success is-dismissible">
                 <p><?php
                     /* translators: 1: number of images updated, 2: number of images skipped */
-                    echo esc_html(sprintf(__('AltPilot: %1$d images updated, %2$d skipped.', 'altpilot'), $processed, $skipped));
+                    echo esc_html(sprintf(__('AutoAltify: %1$d images updated, %2$d skipped.', 'autoaltify'), $processed, $skipped));
                     ?></p>
             </div>
         <?php
         }
 
-        if (isset($_REQUEST['altpilot_error']) && 'perm' === $_REQUEST['altpilot_error']) {
+        if (isset($_REQUEST['autoaltify_error']) && 'perm' === $_REQUEST['autoaltify_error']) {
         ?>
             <div class="notice notice-error is-dismissible">
-                <p><?php esc_html_e('AltPilot: You do not have permission to run this action.', 'altpilot'); ?></p>
+                <p><?php esc_html_e('AutoAltify: You do not have permission to run this action.', 'autoaltify'); ?></p>
             </div>
         <?php
         }
@@ -530,7 +530,7 @@ class Admin
     public function print_bulk_run_script()
     {
         $screen = get_current_screen();
-        if (! $screen || 'settings_page_altpilot' !== $screen->id) {
+        if (! $screen || 'settings_page_autoaltify' !== $screen->id) {
             return;
         }
 
@@ -540,24 +540,24 @@ class Admin
         ?>
         <script type="text/javascript">
             (function($) {
-                $('#altpilot-run-all').on('click', function(e) {
+                $('#autoaltify-run-all').on('click', function(e) {
                     e.preventDefault();
-                    if (!confirm('<?php echo esc_js(__("Run AltPilot across entire media library? This will only set missing ALT attributes. Continue?", 'altpilot')); ?>')) {
+                    if (!confirm('<?php echo esc_js(__("Run AutoAltify across entire media library? This will only set missing ALT attributes. Continue?", 'autoaltify')); ?>')) {
                         return;
                     }
-                    $('#altpilot-progress').show();
-                    $('#altpilot-bar').css('width', '0%');
-                    $('#altpilot-status').text('0');
-                    $('#altpilot-summary').text('');
+                    $('#autoaltify-progress').show();
+                    $('#autoaltify-bar').css('width', '0%');
+                    $('#autoaltify-status').text('0');
+                    $('#autoaltify-summary').text('');
                     var offset = 0;
                     var totalProcessed = 0;
                     var totalSkipped = 0;
                     var batch = <?php echo (int) $batch_size; ?>;
 
                     function runBatch() {
-                        $('#altpilot-status').text(offset);
+                        $('#autoaltify-status').text(offset);
                         $.post('<?php echo esc_js($ajax); ?>', {
-                            action: 'altpilot_bulk_run',
+                            action: 'autoaltify_bulk_run',
                             offset: offset,
                             nonce: '<?php echo esc_js($nonce); ?>'
                         }, function(response) {
@@ -567,21 +567,21 @@ class Admin
                                 offset = response.data.next_offset;
                                 var processedCount = totalProcessed + totalSkipped;
                                 var pct = Math.min(100, Math.round((processedCount / (processedCount + 1)) * 100));
-                                $('#altpilot-bar').css('width', pct + '%');
-                                $('#altpilot-summary').text('<?php echo esc_js(__("Processed:", 'altpilot')); ?>' + totalProcessed + ' | <?php echo esc_js(__("Skipped:", 'altpilot')); ?>' + totalSkipped);
+                                $('#autoaltify-bar').css('width', pct + '%');
+                                $('#autoaltify-summary').text('<?php echo esc_js(__("Processed:", 'autoaltify')); ?>' + totalProcessed + ' | <?php echo esc_js(__("Skipped:", 'autoaltify')); ?>' + totalSkipped);
                                 if (response.data.more) {
                                     setTimeout(runBatch, 250);
                                 } else {
-                                    $('#altpilot-bar').css('width', '100%');
-                                    $('#altpilot-summary').text('<?php echo esc_js(__("Done. Processed:", 'altpilot')); ?>' + totalProcessed + ' | <?php echo esc_js(__("Skipped:", 'altpilot')); ?>' + totalSkipped);
-                                    $('<div class="notice notice-success is-dismissible"><p><?php echo esc_js(__("AltPilot bulk run finished.", 'altpilot')); ?></p></div>').insertBefore('.wrap');
+                                    $('#autoaltify-bar').css('width', '100%');
+                                    $('#autoaltify-summary').text('<?php echo esc_js(__("Done. Processed:", 'autoaltify')); ?>' + totalProcessed + ' | <?php echo esc_js(__("Skipped:", 'autoaltify')); ?>' + totalSkipped);
+                                    $('<div class="notice notice-success is-dismissible"><p><?php echo esc_js(__("AutoAltify bulk run finished.", 'autoaltify')); ?></p></div>').insertBefore('.wrap');
                                 }
                             } else {
                                 var msg = (response && response.data && response.data.message) ? response.data.message : 'error';
-                                $('<div class="notice notice-error is-dismissible"><p>AltPilot AJAX error: ' + msg + '</p></div>').insertBefore('.wrap');
+                                $('<div class="notice notice-error is-dismissible"><p>AutoAltify AJAX error: ' + msg + '</p></div>').insertBefore('.wrap');
                             }
                         }).fail(function(xhr) {
-                            $('<div class="notice notice-error is-dismissible"><p>AltPilot: AJAX request failed.</p></div>').insertBefore('.wrap');
+                            $('<div class="notice notice-error is-dismissible"><p>AutoAltify: AJAX request failed.</p></div>').insertBefore('.wrap');
                         });
                     }
                     runBatch();

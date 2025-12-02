@@ -1,14 +1,14 @@
 <?php
 /**
- * AltPilot Logger Class
+ * AutoAltify Logger Class
  *
  * Handles logging of ALT text generation operations.
  *
- * @package AltPilot
+ * @package AutoAltify
  * @subpackage Core
  */
 
-namespace AltPilot\Core;
+namespace AutoAltify\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Logger {
 
-	const LOG_DIR  = 'altpilot-logs';
-	const LOG_FILE = 'altpilot.log';
+	const LOG_DIR  = 'autoaltify-logs';
+	const LOG_FILE = 'autoaltify.log';
 
 	/**
 	 * Log a message if logging is enabled.

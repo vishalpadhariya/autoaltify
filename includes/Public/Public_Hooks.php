@@ -1,18 +1,18 @@
 <?php
 /**
- * AltPilot Public (Frontend) Hooks Class
+ * AutoAltify Public (Frontend) Hooks Class
  *
  * Handles public-facing functionality and hooks.
  *
- * @package AltPilot
+ * @package AutoAltify
  * @subpackage Public
  */
 
-namespace AltPilot\Public_Hooks;
+namespace AutoAltify\Public_Hooks;
 
-use AltPilot\Core\Generator;
-use AltPilot\Core\Logger;
-use AltPilot\Core\Options;
+use AutoAltify\Core\Generator;
+use AutoAltify\Core\Logger;
+use AutoAltify\Core\Options;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

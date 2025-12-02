@@ -1,14 +1,14 @@
 <?php
 /**
- * AltPilot Generator Class
+ * AutoAltify Generator Class
  *
  * Handles ALT text generation logic and strategies.
  *
- * @package AltPilot
+ * @package AutoAltify
  * @subpackage Core
  */
 
-namespace AltPilot\Core;
+namespace AutoAltify\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -53,7 +53,7 @@ class Generator {
 		 * @param string $alt             The generated ALT text.
 		 * @param int    $attachment_id   The attachment ID.
 		 */
-		$alt = apply_filters( 'altpilot_generated_alt', $alt, $attachment_id );
+		$alt = apply_filters( 'autoaltify_generated_alt', $alt, $attachment_id );
 
 		// Final sanitize.
 		$alt = sanitize_text_field( $alt );
@@ -85,7 +85,7 @@ class Generator {
 		 *
 		 * @param string $title The cleaned title.
 		 */
-		$title = apply_filters( 'altpilot_clean_title', $title );
+		$title = apply_filters( 'autoaltify_clean_title', $title );
 
 		return $title;
 	}
@@ -147,7 +147,7 @@ class Generator {
 
 		// If empty, fallback to generic.
 		if ( '' === $name ) {
-			$name = __( 'Image', 'altpilot' );
+			$name = __( 'Image', 'autoaltify' );
 		}
 
 		$name = mb_convert_case( $name, MB_CASE_TITLE, get_bloginfo( 'charset' ) );
@@ -157,7 +157,7 @@ class Generator {
 		 *
 		 * @param string $name The cleaned filename.
 		 */
-		$name = apply_filters( 'altpilot_clean_filename', $name );
+		$name = apply_filters( 'autoaltify_clean_filename', $name );
 
 		return $name;
 	}

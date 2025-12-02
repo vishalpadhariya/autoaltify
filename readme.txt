@@ -1,4 +1,4 @@
-=== AltPilot ===
+=== AutoAltify ===
 Contributors: vishalpadhariya
 Tags: alt text, seo, media library, bulk actions, automated
 Requires at least: 5.0
@@ -12,7 +12,7 @@ Auto-generate missing ALT text for WordPress image attachments with multiple gen
 
 == Description ==
 
-AltPilot is a powerful WordPress plugin that automatically generates descriptive ALT text for images in your media library. Improve accessibility and SEO while saving time on manual ALT text entry.
+AutoAltify is a powerful WordPress plugin that automatically generates descriptive ALT text for images in your media library. Improve accessibility and SEO while saving time on manual ALT text entry.
 
 = Features =
 
@@ -52,29 +52,29 @@ AltPilot is a powerful WordPress plugin that automatically generates descriptive
 
 * Modular class-based architecture
 * Multiple action and filter hooks for customization
-* Clean namespace implementation (AltPilot\)
+* Clean namespace implementation (AutoAltify\)
 * Well-documented code with PHPDoc comments
 * Easy to extend and integrate with other plugins
 
 = Translations =
 
-AltPilot is fully translatable. Text domain: `altpilot`
+AutoAltify is fully translatable. Text domain: `autoaltify`
 
 == Installation ==
 
 1. Download the plugin files
-2. Upload the `altpilot` folder to `/wp-content/plugins/` directory
+2. Upload the `autoaltify` folder to `/wp-content/plugins/` directory
 3. Activate the plugin through 'Plugins' menu in WordPress
-4. Go to Settings → AltPilot to configure options
+4. Go to Settings → AutoAltify to configure options
 
 == Configuration ==
 
-Navigate to **Settings → AltPilot** to configure:
+Navigate to **Settings → AutoAltify** to configure:
 
 * **Auto-generate on Upload** - Enable automatic generation when images are uploaded
 * **Generation Mode** - Choose how ALT text is built (Title Only, Title + Site Name, Clean Filename)
 * **Allowed Image Types** - Select which formats to process (JPG, PNG, GIF, WebP, AVIF, SVG)
-* **Enable Logging** - Turn on logging to wp-content/uploads/altpilot-logs/
+* **Enable Logging** - Turn on logging to wp-content/uploads/autoaltify-logs/
 * **Batch Size** - Set images per batch (5-200, default 30)
 
 == Usage ==
@@ -83,7 +83,7 @@ Navigate to **Settings → AltPilot** to configure:
 Enable the "Auto-generate on upload" setting to automatically generate ALT text for newly uploaded images.
 
 = Bulk Run All Media =
-1. Go to Settings → AltPilot
+1. Go to Settings → AutoAltify
 2. Click "Run ALT Generator on all media (missing only)"
 3. Watch the progress bar
 4. Only processes images without existing ALT text
@@ -91,7 +91,7 @@ Enable the "Auto-generate on upload" setting to automatically generate ALT text 
 = Media Library Bulk Action =
 1. Go to Media Library
 2. Select one or more images
-3. Choose "Generate ALT with AltPilot" from Bulk Actions
+3. Choose "Generate ALT with AutoAltify" from Bulk Actions
 4. Click Apply
 
 = Media Library Column =
@@ -103,26 +103,26 @@ View ALT status directly in the media library with the new "ALT Status" column s
 
 = Filters =
 
-**altpilot_generated_alt**
+**autoaltify_generated_alt**
 Modify the generated ALT text before it's saved.
 
-    add_filter( 'altpilot_generated_alt', function( $alt, $attachment_id ) {
+    add_filter( 'autoaltify_generated_alt', function( $alt, $attachment_id ) {
         return 'Image: ' . $alt;
     }, 10, 2 );
 
-**altpilot_clean_title**
+**autoaltify_clean_title**
 Modify the cleaned title before final ALT text.
 
-**altpilot_clean_filename**
+**autoaltify_clean_filename**
 Modify the cleaned filename before final ALT text.
 
 = Classes =
 
-* `AltPilot\Core\Generator` - ALT text generation logic
-* `AltPilot\Core\Logger` - Logging functionality
-* `AltPilot\Core\Options` - Settings management
-* `AltPilot\Admin\Admin` - Admin interface
-* `AltPilot\Public_Hooks\Public_Hooks` - Frontend hooks
+* `AutoAltify\Core\Generator` - ALT text generation logic
+* `AutoAltify\Core\Logger` - Logging functionality
+* `AutoAltify\Core\Options` - Settings management
+* `AutoAltify\Admin\Admin` - Admin interface
+* `AutoAltify\Public_Hooks\Public_Hooks` - Frontend hooks
 
 See DEVELOPER-GUIDE.md for detailed API documentation.
 
@@ -130,11 +130,11 @@ See DEVELOPER-GUIDE.md for detailed API documentation.
 
 = Will this overwrite existing ALT text? =
 
-No. AltPilot only generates ALT text for images that don't already have it.
+No. AutoAltify only generates ALT text for images that don't already have it.
 
 = Can I customize the ALT text? =
 
-Yes! Use the provided filters (altpilot_generated_alt, altpilot_clean_title, altpilot_clean_filename) to customize generation.
+Yes! Use the provided filters (autoaltify_generated_alt, autoaltify_clean_title, autoaltify_clean_filename) to customize generation.
 
 = What about performance with large media libraries? =
 
@@ -142,7 +142,7 @@ AJAX batching handles large libraries efficiently. The system processes configur
 
 = Where are logs stored? =
 
-Logs are stored at wp-content/uploads/altpilot-logs/altpilot.log when logging is enabled.
+Logs are stored at wp-content/uploads/autoaltify-logs/autoaltify.log when logging is enabled.
 
 = Which image types are supported? =
 
